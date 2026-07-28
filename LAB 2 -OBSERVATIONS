@@ -1,0 +1,19 @@
+Results
+- Final training loss: 0.0731 (binary cross-entropy), dropping steadily and smoothly across 100 epochs
+- Final training accuracy: 97.00%
+- Learned parameters: weights ≈ `[1.125, 1.145]`, bias ≈ `-0.024`
+- The decision boundary is a straight line, correctly separating the two blob clusters.
+
+Observations
+1. The loss curve decreased smoothly and monotonically — there were no oscillations, which makes sense since gradient descent was applied consistently with a fixed, reasonably small learning rate (0.1).
+2. Accuracy rose quickly in the first several epochs and then plateaued near 97%, meaning most of the "learning" happened early, with later epochs only fine-tuning the boundary slightly.
+3. The two learned weights came out almost equal (`1.125` and `1.145`), which makes sense given the data — both features (Feature 1 and Feature 2) contributed almost equally to separating the two clusters.
+4. The bias stayed very close to zero, meaning the decision boundary passes roughly through the center of the data — again expected, since the two clusters were placed symmetrically around the origin.
+5. Because sigmoid + binary cross-entropy were used, the backward pass simplified neatly to `a - y`, which made writing the gradient calculation by hand straightforward — this is a well-known mathematical convenience of pairing these two together.
+6. A few points near the boundary line were still misclassified (accuracy wasn't 100%), since the two clusters had a small amount of overlap (`cluster_std = 1.3`) rather than being perfectly separable.
+
+Conclusions
+1. A single neuron with a sigmoid activation is essentially **logistic regression** — it can only learn a linear decision boundary, same fundamental limitation as the Lab 1 perceptron, but it outputs a smooth probability instead of a hard 0/1.
+2. Implementing the forward pass, loss, and backward pass manually (without autograd) helped reinforce *why* the math works — especially how the gradient of BCE + sigmoid collapses into the simple expression `a - y`, which is the same trick used internally by frameworks like PyTorch.
+3. This neuron performed slightly better than the raw perceptron from Lab 1 in one meaningful way: because it outputs a probability rather than a hard label, it can express *uncertainty* near the decision boundary, rather than always committing to a hard 0 or 1.
+4. The experiment reinforces the progression across the three labs: perceptron (hard decision, linear) → single neuron (probabilistic, still linear) → feedforward network (probabilistic, non-linear) — each step removing one limitation of the previous model.
