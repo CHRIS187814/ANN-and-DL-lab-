@@ -1,0 +1,26 @@
+Results
+I trained a small MLP (multi-layer perceptron) using Keras on the Wine dataset, which has 178 samples split into 3 classes based on 13 chemical measurements.
+After splitting the data into training, validation, and test sets and scaling the features, the model was trained for a maximum of 150 epochs but stopped early at epoch 30 because the validation loss stopped improving.
+On the test set (27 samples), the model got an accuracy of about **92.6%**, correctly classifying 25 out of 27 samples. The test loss was around 0.14.
+Looking at the confusion matrix, all 9 samples of class_0 and all 11 samples of class_1 were classified correctly. Out of 7 samples of class_2, 
+5 were correctly classified but 2 were wrongly predicted as class_1. So all the errors the model made were in one direction — it never confused class_0 with anything, and it never mistook class_1 for class_2, only the other way around.
+
+Observations
+- The training accuracy reached 100% while the validation accuracy stayed around 96%. This is a sign of **overfitting** — the model basically memorized the training data after a point instead of learning patterns that generalize well to new data. This is expected in small datasets like this one where there isn't a lot of data to learn from.
+- I used EarlyStopping so the training doesn't keep going after the validation loss starts getting worse, which helped stop the model before it overfit even more.
+- class_0 was the easiest class for the model to identify (100% precision and recall), which probably means class_0 wines have chemical properties that are quite different from the other two classes, making them easier to separate.
+- class_2 was the hardest one, since 2 of the errors came from this class getting mixed up with class_1. This could mean their chemical values (like flavanoids or color intensity) overlap more with each other compared to class_0.
+- I noticed that scaling the features (using StandardScaler) before training was important, since the features are on very different scales (e.g. proline goes up to 1680 while hue is under 2). Without scaling, the bigger-value features could have unfairly dominated the model's learning.
+- The model is fairly small (only around 1000 trainable parameters) but still performed well, showing that for a small dataset like this, a bigger/deeper model isn't really necessary and might even overfit faster.
+
+Key Findings
+
+1. The model achieved good accuracy (~93%) on unseen test data despite being a simple architecture with just two hidden layers.
+2. Overfitting happened quickly, which is a common issue when working with small datasets and needs to be handled using techniques like Dropout and EarlyStopping (both of which I used here).
+3. Not all classes are equally easy to predict — class_0 was distinct and easy, while class_1 and class_2 had some overlap.
+4. Feature scaling had a meaningful effect on how well the model could learn, reinforcing the idea that preprocessing steps matter just as much as the model architecture itself.
+
+Conclusion
+
+Overall, this experiment shows that even a simple Keras MLP can perform quite well on a small multiclass classification problem like the Wine dataset, reaching over 90% accuracy on the test set. At the same time, it highlighted a common real-world ML issue — overfitting — which had to be managed using Dropout and EarlyStopping. The results also showed that not all classes are equally separable, and that some misclassifications (like between class_1 and class_2) are more likely due to overlapping feature values. 
+This assignment helped me understand not just how to build an MLP, but also how to read training curves, confusion matrices, and classification reports to actually judge whether a model is learning well or just memorizing.
