@@ -1,0 +1,16 @@
+Observations
+
+1. The perceptron converged very quickly — within just 2 epochs — because the two clusters of data were well-separated and linearly separable.
+2. The learned weights (`w ≈ [0.416, 0.250]`) and bias (`b ≈ -0.100`) produced a single straight-line decision boundary, clearly visible as a diagonal split in the plot.
+3. Once trained, the perceptron classified every point in the simulated real-time stream correctly — running accuracy stayed flat at 100% from the very first point onward.
+4. The activation values (`w·x + b`) for each point were mostly far from zero, meaning the model was confidently correct rather than making borderline decisions.
+5. No point in the stream fell close to the decision boundary, which is consistent with how cleanly separated the training data was.
+6. Unlike the feedforward network from Lab 3, the perceptron only outputs a hard 0 or 1 — there's no probability score, so I used the raw net input as a rough stand-in for "confidence."
+
+Conclusions
+
+1. A single perceptron can solve classification problems well, but only when the classes are linearly separable — this experiment worked cleanly because I intentionally used well-separated blob data.
+2. The perceptron learning rule is simple but effective: it adjusts weights only when a misclassification occurs, and stops improving once no errors remain (i.e., it converges).
+3. This lab reinforced the core limitation of a single-layer perceptron — it cannot model curved or non-linear decision boundaries, which is exactly the gap that motivates moving to a multi-layer feedforward network (as done in Lab 3 with the "moons" dataset).
+4. The real-time simulation showed that once a perceptron is trained, classifying new incoming data is computationally trivial and instantaneous — useful for understanding how simple models can still be deployed in real-time systems, as long as the underlying assumption (linear separability) holds.
+5. Overall, this lab helped build intuition for *why* deeper networks with non-linear activations (like ReLU) are necessary for anything beyond simple, cleanly separated data.
