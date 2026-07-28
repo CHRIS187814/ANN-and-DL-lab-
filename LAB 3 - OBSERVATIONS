@@ -1,0 +1,18 @@
+Results
+- Architecture: `Linear(2→16) → ReLU → Linear(16→8) → ReLU → Linear(8→1) → Sigmoid`
+- Final train loss: 0.1088 | Final test loss: 0.1008 (both binary cross-entropy)
+- Final test accuracy: 96.67%
+- Trained for 300 epochs using the Adam optimizer (lr = 0.01) on the "two moons" dataset — a dataset that is not linearly separable
+
+Observations
+1. Train and test loss stayed very close throughout training (0.1088 vs 0.1008), meaning the model generalized well and wasn't overfitting despite having two hidden layers.
+2. Accuracy jumped quickly in the first ~50 epochs (from 50% to ~87%), then improved more gradually, and plateaued around epoch 150 at ~96–97% — showing most of the learning happens early, with later epochs doing fine adjustments.
+3. The learned decision boundary was **curved**, correctly wrapping around the interleaving "moon" shapes — something neither the Lab 1 perceptron nor the Lab 2 single neuron could do, since both are restricted to straight-line boundaries.
+4. A handful of points near where the two moons curve closest together were still misclassified, which makes sense — that's the region of greatest overlap between the two classes.
+5. Using PyTorch's `nn.Sequential` and built-in autograd made the code far shorter than Lab 2's manual neuron implementation, since the forward pass, loss computation, and backward pass (`loss.backward()`) required no hand-derived gradients.
+
+Conclusions
+1. Adding hidden layers with a non-linear activation (ReLU) is what allows the network to model non-linear decision boundaries — this is the key capability that separates a feedforward network from a single neuron or perceptron.
+2. The close match between train and test loss suggests the network's capacity (2 hidden layers, 16 and 8 neurons) was well-suited to this problem — not so large that it overfit, not so small that it underfit.
+3. This lab completes the progression across all three labs: the perceptron (Lab 1) could only separate linearly separable data with a hard decision; the single neuron (Lab 2) added a probabilistic output but was still linear; this feedforward network (Lab 3) adds hidden layers and non-linearity, enabling it to solve problems the earlier two models fundamentally could not.
+4. Using an established framework (PyTorch) instead of manual NumPy code trades some transparency of the underlying math for speed of development and reliability — useful to note if the lab report is expected to compare "manual" vs. "framework-based" implementations.
